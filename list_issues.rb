@@ -10,14 +10,11 @@ class Issue
 
   def list
     uri = URI("https://api.github.com/issues")
-    req = Net::HTTP::Get.new(uri, {'Content-Type' =>'application/json'})
-    req.basic_auth ENV['GITHUB_USER'], ENV['GITHUB_PASSWORD']
     http = Net::HTTP.new(uri.hostname, uri.port)
+    req = Net::HTTP::Get.new(uri)
+    req.basic_auth ENV['GITHUB_USER'], ENV['GITHUB_PASSWORD']
     http.use_ssl = true
-    http.start
     response = http.request(req)
-    return_list = response.body
-    JSON.parse(return_list)
+    JSON.parse(response.body)
   end
-
 end
